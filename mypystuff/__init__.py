@@ -1,6 +1,6 @@
 """... automodule::"""
-from chunkiter import chunkiter
-from getngrams import getngrams
+#from chunkiter import chunkiter
+#from getngrams import getngrams
 import rlike
 import qcompstuff
 import uhash
@@ -10,3 +10,6 @@ import imlazy
 import xkcdstyle
 import iterhelpers
 import dfa
+import mappers
+import nlp
+import mplstuff

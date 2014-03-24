@@ -95,15 +95,13 @@ class ConfusionMatrix(object):
         except TypeError:
             self.mat[prediction, actual] += 1
 
-EPSILON = 10e-15
+TAU = 1e-10
 def log_loss(t, o):
-    return -(t * np.log(o + EPSILON) + (1 - o) * np.log(1 - t + EPSILON))
+    return -t * np.log(o + TAU) - (1 - t) * np.log(1 - o + TAU)
 
 def multiclass_log_loss(t, o):
-    return -np.log(o[t.argmax()] + EPSILON)
+    return -np.log(o[t.argmax()] + TAU)
 
 def square_loss(t, o):
     return (t - o)**2
-
-
 

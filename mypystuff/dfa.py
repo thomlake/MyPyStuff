@@ -33,15 +33,37 @@ class DFA(object):
             self.step(symbol)
         return self.state in self.accept
 
-    def nextsymbolpredict(self, seq):
+    def nextsymbolpredict(self, seq, N = 200, steps = 100):
+        '''
         self.reset()
         for x in seq:
             self.step(x)
-        Q = deque([state for state in self.accept])
-        visited = self.accept.copy()
+        Q = deque([(self.T[self.state, i], i) for i in range(len(self.T[0]))])
+        visited = set([state for state, symbol in Q])
         while Q:
-            
-
+            state, symbol = Q.popleft()
+            for nextsymbol, nextstate in enumerate(self.T[state]):
+                if nextstate in self.accept:
+                    return symbol
+                elif nextstate not in visited:
+                    Q.append((nextstate, symbol))
+                    visited.add(nextstate)
+        return random.choice([0, 1])
+        '''
+        nsymbols = len(self.T[0])
+        d = defaultdict(int)
+        for i in range(N):
+            self.reset()
+            first = np.random.randint(nsymbols)
+            self.step(first)
+            for t in range(1, steps):
+                if self.accepting():
+                    d[first] += 1./t
+                    break
+                self.step(np.random.randint(nsymbols))
+        if len(d):
+            return max(d.items(), key = lambda x: x[1])[0]
+        return np.random.randint(nsymbols)
 
     def gen(self, maxlen = 100):
         while True:
